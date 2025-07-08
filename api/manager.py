@@ -1,11 +1,12 @@
 import asyncio
 from typing import Dict, Any, Optional
+from cachetools import LRUCache
 
 
 class ProcessManager:
-    def __init__(self):
+    def __init__(self, cache_size: int = 100):
         self.locks: Dict[str, asyncio.Lock] = {}
-        self.cache: Dict[str, Any] = {}
+        self.cache: LRUCache = LRUCache(maxsize=cache_size)
         self.cache_events: Dict[str, asyncio.Event] = {}
 
     async def acquire(self, key: str):
